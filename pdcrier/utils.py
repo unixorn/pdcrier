@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 #
+# Copyright 2022, Joe Block <jpb@unixorn.net>
+# License: Apache 2.0
+#
 # Utility functions
 import yaml
+
 
 def writeYAMLFile(path: str, data):
     """
@@ -21,3 +25,10 @@ def readYAMLFile(path: str):
         # Python dictionary format
         data = yaml.load(file, Loader=yaml.FullLoader)
     return data
+
+
+if __name__ == "__main__":
+    import sys
+
+    print("This is not meant to be run standalone. Import functions from it")
+    sys.exit(13)
