@@ -6,6 +6,7 @@ authors = ["Joe Block <jpb@unixorn.net>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pyaml = "^21.10.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
