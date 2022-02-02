@@ -10,7 +10,7 @@ import logging
 import os
 import sys
 
-from pdcrier.pagerduty import loadCrierSettings, PagerDuty
+from pdcrier.pagerduty import PagerDuty, loadCrierSettings
 
 
 def parseCLI():
