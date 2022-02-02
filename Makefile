@@ -29,3 +29,15 @@ verbose_tests:
 
 venv:
 	virtualenv venv
+
+distclean:
+	rm dist/*
+
+build: distclean format
+	poetry build
+
+image: Dockerfile build
+	docker buildx build --platform linux/arm/v7,linux/amd64,linux/arm64 --push -t unixorn/pdcrier .
+
+amd: Dockerfile build
+	docker buildx build --platform linux/amd64 --load -t unixorn/pdcrier .
