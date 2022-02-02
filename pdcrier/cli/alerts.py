@@ -19,7 +19,6 @@ def parseCLI():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--api-token", help="PagerDuty api token", type=str)
-    parser.add_argument("-d", "--debug", help="Debug setting", action="store_true")
     parser.add_argument(
         "-l",
         "--log-level",
@@ -32,7 +31,6 @@ def parseCLI():
         parser.add_argument(
             "--settings-file",
             "--settings",
-            "-s",
             type=str,
             help="Path to a settings file. Settings in the file are overridden by command line options",
             default=f"{os.environ.get('HOME')}/.hass-tools/pagerduty.yaml",
@@ -41,9 +39,8 @@ def parseCLI():
         parser.add_argument(
             "--settings-file",
             "--settings",
-            "-s",
             type=str,
-            default="pdcrier.yaml",
+            default="/config/pagerduty.yaml",
             help="Path to a settings file. Settings in the file are overridden by command line options",
         )
 
@@ -69,9 +66,9 @@ def parseCLI():
     return cli
 
 
-def main():
+def alerter():
     """
-    Main program driver
+    Create an alert
     """
     cli = parseCLI()
     settings = loadCrierSettings(cli=cli)
@@ -89,4 +86,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    print("This file should be imported, not run directly")
+    sys.exit(13)

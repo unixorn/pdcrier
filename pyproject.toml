@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pdcrier"
-version = "0.1.0"
+version = "0.1.1"
 license = "Apache 2.0"
 description = "Wrapper scripts for creating PagerDuty alerts"
 authors = ["Joe Block <jpb@unixorn.net>"]
@@ -18,6 +18,9 @@ pytest = "^5.2"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/unixorn/pdcrier/issues"
+
+[tool.poetry.scripts]
+pd-alert = "pdcrier.cli.alerts:alerter"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
