@@ -8,7 +8,6 @@
 import argparse
 import logging
 import os
-import sys
 
 from pdcrier.pagerduty import PagerDuty, loadCrierSettings
 
@@ -46,7 +45,9 @@ def parseCLI():
 
     # Alert options
     parser.add_argument(
-        "--message", help="Alert message body - won't be visible in SMSes", type=str
+        "--message",
+        help="Alert message body - this won't be visible in SMSes",
+        type=str,
     )
     parser.add_argument("--sender", help="Email address to send alerts from")
     parser.add_argument("--service-id", help="Service ID to create an alert")
@@ -87,4 +88,4 @@ def alerter():
 
 if __name__ == "__main__":
     print("This file should be imported, not run directly")
-    sys.exit(13)
+    alerter()

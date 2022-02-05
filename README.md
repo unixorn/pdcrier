@@ -1,6 +1,6 @@
 # pdcrier
 
-Read a MQTT queue and create/update PagerDuty alerts
+Create PagerDuty alerts from the command-line.
 
 ## Dependencies
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pdcrier"
-version = "0.1.1"
+version = "0.1.3"
 license = "Apache 2.0"
 description = "Wrapper scripts for creating PagerDuty alerts"
 authors = ["Joe Block <jpb@unixorn.net>"]
