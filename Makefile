@@ -13,7 +13,7 @@ v: verbose_tests
 format: format_code format_tests
 
 format_code:
-	black pdcrier/*.py
+	black pdcrier/*.py pdcrier/cli/*.py
 	black bin/*
 
 format_tests:
