@@ -8,7 +8,7 @@
 import logging
 
 from pdcrier.utils import readYAMLFile
-from pdpyras import APISession
+from pdpyras import APISession, PDHTTPError
 
 
 def loadCrierSettings(cli):
@@ -23,31 +23,31 @@ def loadCrierSettings(cli):
 
     if cli.api_token:
         settings["pagerduty-api-token"] = cli.api_token
-    if not settings["pagerduty-api-token"]:
-        logging.error(
+    if "pagerduty-api-token" not in settings:
+        raise ValueError(
             "You must specify a PagerDuty API token, either in the settings file or via the cli."
         )
-        sys.exit(13)
     else:
         logging.debug(f"pagerduty-api-token: {settings['pagerduty-api-token']}")
 
+    if cli.incident_key:
+        settings["incident_key"] = cli.incident_key
+
     if cli.sender:
         settings["default-sender"] = cli.sender
-    if not settings["default-sender"]:
-        logging.error(
+    if "default-sender" not in settings:
+        raise ValueError(
             "You must specify a default sender email address, either in the settings file or via the cli."
         )
-        sys.exit(13)
     else:
         logging.debug(f"Default sender: {settings['default-sender']}")
 
     if cli.service_id:
         settings["service_id"] = cli.service_id
-    if not settings["service_id"]:
-        logging.error(
+    if "service_id" not in settings:
+        raise ValueError(
             "You must specify a PagerDuty service id, either in the settings file or via the cli."
         )
-        sys.exit(13)
     else:
         logging.debug(f"Service ID: {settings['service_id']}")
 
@@ -62,7 +62,14 @@ class PagerDuty:
             f"Set API token to {self.api_token}, default sender set to {sender}."
         )
 
-    def createIncident(self, title: str, service_id: str, message: str = None):
+    def createIncident(
+        self,
+        title: str,
+        service_id: str,
+        message: str = None,
+        incident_key: str = None,
+        allow_duplicates=False,
+    ):
         payload = {
             "type": "incident",
             "title": title,
@@ -73,14 +80,30 @@ class PagerDuty:
             payload["body"] = {"type": "incident_body", "details": f"{message}"}
         else:
             logging.debug("No alert body set")
+
+        if not allow_duplicates:
+            # Try to not have duplicate alerts for the same incident
+            if not incident_key:
+                logging.warning(
+                    f"No incident_key specified, using alert title '{title}'"
+                )
+                incident_key = title
+            payload["incident_key"] = incident_key
+
         logging.info(f"Creating an incident using payload {payload}")
-        incident = self.session.rpost("incidents", json=payload)
-        logging.debug(f"incident: {incident}")
-        return incident
+        try:
+            incident = self.session.rpost("incidents", json=payload)
+            logging.debug(f"incident: {incident}")
+            return incident
+        except PDHTTPError as error:
+            for error_message in error.response.json()["error"]["errors"]:
+                logging.debug(f"{error_message}")
+
+            return {"exception-response": error}
 
 
 if __name__ == "__main__":
-    import sys
 
-    print("This is not meant to be run standalone. Import functions from it")
-    sys.exit(13)
+    raise RuntimeError(
+        "This is not meant to be run standalone. Import functions from it"
+    )
